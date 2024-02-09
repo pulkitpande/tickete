@@ -6,6 +6,7 @@ import {
   Divider,
   HStack,
   Input,
+  Stack,
   Tooltip,
   VStack,
   useDisclosure,
@@ -32,6 +33,7 @@ import Accordion from "@/src/ui/primitives/Accordian";
 
 import Footer from "@/src/ui/shared/footer";
 import Image from "next/image";
+import { useResponsiveSizes } from "@/src/context/responsive";
 
 const DynamicRefundStatusModal = dynamic(() => {
   return import("../src/ui/home/refund-status-modal");
@@ -80,7 +82,98 @@ const FAQData: FAQDataType[] = [
   },
 ];
 
+const CheckoutSummary = () => {
+  return (
+    <VStack gap={4} alignItems={"flex-start"} w={"full"}>
+      <Box
+        w={"full"}
+        h={150}
+        border={"1px solid"}
+        borderColor={theme.colors._lightgray}
+        borderRadius={"2xl"}
+        position={"relative"}
+        overflow={"hidden"}
+      >
+        <Image alt="img" layout="fill" objectFit="cover" src={"/img.webp"} />
+      </Box>
+      <Box>
+        <VStack alignItems={"flex-start"}>
+          <HStack fontSize={"sm"}>
+            <Star width={18} height={18} />
+            <Text>6.4(75)</Text>
+          </HStack>
+          <Text fontWeight={"semibold"} fontSize={"md"}>
+            Global Village Dubai
+          </Text>
+        </VStack>
+        <VStack gap={4} alignItems={"flex-start"} py={5}>
+          <HStack gap={4}>
+            <AccessStatus width={20} height={20} />
+            <Text>Global Village: Any Day Access</Text>
+          </HStack>
+          <HStack gap={4}>
+            <Calendar width={20} height={20} />
+            <Text>Sat, Feb 10 2024</Text>
+          </HStack>
+          <HStack gap={4}>
+            <Guest width={20} height={20} />
+            <Text> 1 Guests</Text>
+          </HStack>
+        </VStack>
+      </Box>
+      <Divider borderColor={theme.colors._lightgray} />
+      <HStack
+        width={"full"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
+        <Text fontSize={"lg"}>Total payable: ₹621.10</Text>
+        <Tag
+          icon={<PiggyBank />}
+          bg={theme.colors._lightgreen}
+          color={theme.colors._green}
+          border={"none"}
+          fontWeight={"semibold"}
+        >
+          You save ₹56.46
+        </Tag>
+      </HStack>
+      <HStack gap={5}>
+        <Link href={"/"}>
+          <Text
+            color={theme.colors._gray}
+            textDecoration={"underline"}
+            fontSize={"sm"}
+          >
+            You will be charged in AED
+          </Text>
+        </Link>
+        <Tooltip label={"The price shown here are in INR"}>
+          <Box>
+            <ReadMore fill={theme.colors._gray} />
+          </Box>
+        </Tooltip>
+      </HStack>
+      <Text fontSize={"sm"} color={theme.colors._gray}>
+        By clicking “Confirm & pay”, you agree to Tickete’s terms and conditions
+        and cancellation policy.
+      </Text>
+      <Button
+        w={"full"}
+        leftIcon={<Lock width={18} height={18} fill={theme.colors._white} />}
+        primary
+        size={"lg"}
+        borderRadius={"2xl"}
+      >
+        Confirm & Pay
+      </Button>
+    </VStack>
+  );
+};
+
 export default function Home() {
+  const { isDesktop } = useResponsiveSizes();
+
   const {
     isOpen: isOpenRefundStatusModal,
     onOpen: onOpenRefundStatusModal,
@@ -97,9 +190,20 @@ export default function Home() {
         <Timer time={"30:00"} />
       </Box>
       <Container>
-        <VStack gap={20} py={{ md: 20, base: 10 }}>
+        <VStack gap={{ base: 10, md: 20 }} py={{ md: 20, base: 10 }}>
+          {!isDesktop && (
+            <Box
+              border={"1px solid"}
+              borderColor={theme.colors._lightgray}
+              borderRadius={"2xl"}
+              padding={5}
+            >
+              {" "}
+              <CheckoutSummary />{" "}
+            </Box>
+          )}
           <HStack gap={10} alignItems={"flex-start"} w={"full"}>
-            <VStack flexGrow={1} gap={20} w={"full"}>
+            <VStack flexGrow={1} gap={{ md: 20, base: 10 }} w={"full"}>
               <Box w={"full"}>
                 <Heading asStyle={"h1"}>Confirm & Pay</Heading>
               </Box>
@@ -144,7 +248,12 @@ export default function Home() {
                       focusBorderColor={theme.colors._lightgray}
                       placeholder="Full Name*"
                     />
-                    <HStack width={"full"} gap={5}>
+
+                    <Stack
+                      flexDirection={{ base: "column", md: "row" }}
+                      width={"full"}
+                      gap={5}
+                    >
                       <Input
                         fontSize={"medium"}
                         borderRadius={"xl"}
@@ -163,9 +272,13 @@ export default function Home() {
                         focusBorderColor={theme.colors._lightgray}
                         placeholder="Phone Number*"
                       />
-                    </HStack>
+                    </Stack>
 
-                    <HStack width={"full"} gap={5}>
+                    <Stack
+                      flexDirection={{ base: "column", md: "row" }}
+                      width={"full"}
+                      gap={5}
+                    >
                       <Input
                         fontSize={"medium"}
                         borderRadius={"xl"}
@@ -184,7 +297,7 @@ export default function Home() {
                         focusBorderColor={theme.colors._lightgray}
                         placeholder="Confirm Email*"
                       />
-                    </HStack>
+                    </Stack>
                   </VStack>
                   <Box width={"full"} mt={2}>
                     <Divider borderColor={theme.colors._lightgray} />
@@ -226,7 +339,11 @@ export default function Home() {
                           focusBorderColor={theme.colors._lightgray}
                           placeholder="Card Number"
                         />
-                        <HStack width={"full"} gap={5}>
+                        <Stack
+                          flexDirection={{ base: "column", md: "row" }}
+                          width={"full"}
+                          gap={5}
+                        >
                           <Input
                             fontSize={"medium"}
                             borderRadius={"xl"}
@@ -245,9 +362,13 @@ export default function Home() {
                             focusBorderColor={theme.colors._lightgray}
                             placeholder="CVV"
                           />
-                        </HStack>
+                        </Stack>
 
-                        <HStack width={"full"} gap={5}>
+                        <Stack
+                          flexDirection={{ base: "column", md: "row" }}
+                          width={"full"}
+                          gap={5}
+                        >
                           <Input
                             fontSize={"medium"}
                             borderRadius={"xl"}
@@ -266,7 +387,7 @@ export default function Home() {
                             focusBorderColor={theme.colors._lightgray}
                             placeholder="Name on Card"
                           />
-                        </HStack>
+                        </Stack>
                       </VStack>
                       <VStack alignItems={"flex-start"} gap={7} w={"full"}>
                         <HStack
@@ -382,111 +503,25 @@ export default function Home() {
                 </VStack>
               </Box>
             </VStack>
-            <Box
-              border={"1px solid"}
-              borderColor={theme.colors._lightgray}
-              borderRadius={"2xl"}
-              padding={5}
-              position={"sticky"}
-              top={20}
-              w={600}
-            >
-              <VStack gap={4} alignItems={"flex-start"} w={"full"}>
-                <Box
-                  w={"full"}
-                  h={150}
-                  border={"1px solid"}
-                  borderColor={theme.colors._lightgray}
-                  borderRadius={"2xl"}
-                  position={"relative"}
-                  overflow={"hidden"}
-                >
-                  <Image
-                    alt="img"
-                    layout="fill"
-                    objectFit="cover"
-                    src={"/img.webp"}
-                  />
-                </Box>
-                <Box>
-                  <VStack alignItems={"flex-start"}>
-                    <HStack fontSize={"sm"}>
-                      <Star width={18} height={18} />
-                      <Text>6.4(75)</Text>
-                    </HStack>
-                    <Text fontWeight={"semibold"} fontSize={"md"}>
-                      Global Village Dubai
-                    </Text>
-                  </VStack>
-                  <VStack gap={4} alignItems={"flex-start"} py={5}>
-                    <HStack gap={4}>
-                      <AccessStatus width={20} height={20} />
-                      <Text>Global Village: Any Day Access</Text>
-                    </HStack>
-                    <HStack gap={4}>
-                      <Calendar width={20} height={20} />
-                      <Text>Sat, Feb 10 2024</Text>
-                    </HStack>
-                    <HStack gap={4}>
-                      <Guest width={20} height={20} />
-                      <Text> 1 Guests</Text>
-                    </HStack>
-                  </VStack>
-                </Box>
-                <Divider borderColor={theme.colors._lightgray} />
-                <HStack
-                  width={"full"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                >
-                  <Text fontSize={"lg"}>Total payable: ₹621.10</Text>
-                  <Tag
-                    icon={<PiggyBank />}
-                    bg={theme.colors._lightgreen}
-                    color={theme.colors._green}
-                    border={"none"}
-                    fontWeight={"semibold"}
-                  >
-                    You save ₹56.46
-                  </Tag>
-                </HStack>
-                <HStack gap={5}>
-                  <Link href={"/"}>
-                    <Text
-                      color={theme.colors._gray}
-                      textDecoration={"underline"}
-                      fontSize={"sm"}
-                    >
-                      You will be charged in AED
-                    </Text>
-                  </Link>
-                  <Tooltip label={"The price shown here are in INR"}>
-                    <Box>
-                      <ReadMore fill={theme.colors._gray} />
-                    </Box>
-                  </Tooltip>
-                </HStack>
-                <Text fontSize={"sm"} color={theme.colors._gray}>
-                  By clicking “Confirm & pay”, you agree to Tickete’s terms and
-                  conditions and cancellation policy.
-                </Text>
-                <Button
-                  w={"full"}
-                  leftIcon={
-                    <Lock width={18} height={18} fill={theme.colors._white} />
-                  }
-                  primary
-                  size={"lg"}
-                  borderRadius={"2xl"}
-                >
-                  Confirm & Pay
-                </Button>
-              </VStack>
-            </Box>
+            {isDesktop && (
+              <Box
+                border={"1px solid"}
+                borderColor={theme.colors._lightgray}
+                borderRadius={"2xl"}
+                padding={5}
+                position={"sticky"}
+                top={20}
+                w={600}
+              >
+                <CheckoutSummary />
+              </Box>
+            )}
           </HStack>
-
           <Box w="full">
-            <HStack alignItems={"flex-start"}>
+            <Stack
+              flexDirection={{ base: "column", md: "row" }}
+              alignItems={"flex-start"}
+            >
               <VStack
                 minW={{ md: 450, base: "100%" }}
                 alignItems={"flex-start"}
@@ -499,10 +534,15 @@ export default function Home() {
                   Here are some of our most asked questions.
                 </Text>
               </VStack>
-              <VStack alignItems={"stretch"} flexGrow={1}>
+              <VStack
+                mt={{ base: 10 }}
+                w={{ base: "full" }}
+                alignItems={"stretch"}
+                flexGrow={1}
+              >
                 <Accordion items={FAQData} />
               </VStack>
-            </HStack>
+            </Stack>
           </Box>
         </VStack>
       </Container>

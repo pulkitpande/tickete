@@ -65,7 +65,7 @@ function CustomAccordionItem({
               </Box>
 
               {item.title && (
-                <Text fontWeight={"medium"} fontSize={"lg"}>
+                <Text textAlign={"left"} fontWeight={"medium"} fontSize={"lg"}>
                   {item.title}
                 </Text>
               )}
